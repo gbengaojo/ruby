@@ -1,12 +1,15 @@
 require 'socket'
 
-puts "Starting the Server..................."
-server = TCPServer.open(3000) # Server would listen on port 3000
-loop{                         # Servers run forever
-   client_connection = server.accept # Establish client connect connection
-   Thread.start(client_connection) do |connection|
-      connection.puts(Time.now) # Send the time to the client
-      connection.puts("Closing the connection with #{client_connection}")
-      connection.close      # Disconnect from the client
-   end
-}
+class Server
+  def initialize(socket_address, socket_port)
+    @server_socket = TCPServer.open(socket_port, socket_address)
+
+    @connections_details = Hash.new
+    @connected_clients = Hash.new
+
+    @connections_details[:server] = @server_socket
+    @connections_details[:clients] = @connected_clients
+
+    puts 'Started server......'
+    run
+  end
