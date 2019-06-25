@@ -13,3 +13,24 @@ class Server
     puts 'Started server......'
     run
   end
+
+  def run
+    loop {
+      client_connection = @server_socket.accept
+      Thread.start(client_connection) do |conn| # open thread for each accepted connection
+        conn_name = conn.gets.chomp.to_sym
+        if (@connections_details[:clients][conn_name] != nil) # avoid connection if user exits
+          conn.puts "This username already exists"
+          conn.puts "quit"
+          conn.kill self
+        end
+
+        puts "Connecion established #{conn_name} => #{conn}"
+        @connections_details[:clients][conn_name] = conn
+        conn.puts "Connection established successfully #{conn_name} => #{conn},
+                   you may continuewith chatting..."
+
+        establishing_chatting(conn_name, conn) # allow chatting
+      end
+    }.join
+  end
