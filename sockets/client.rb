@@ -1,11 +1,15 @@
 require 'socket'
 
-socket = TCPSocket.open("localhost", 3000)
+class Client
+  def initialize(socket)
 
-puts "Starting the Client..................."
-while message = socket.gets             # Read lines from the socket
-   puts message.chomp
+  end
+
+  def send_request
+
+  end
+
+  def listen_response
+
+  end
 end
-
-puts "Closing the Client..................."
-socket.close                    # Close the socket
