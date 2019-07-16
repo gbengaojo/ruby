@@ -33,4 +33,16 @@ class Server
         establishing_chatting(conn_name, conn) # allow chatting
       end
     }.join
+
+    def establish_chatting(username, connection)
+      loop do
+        message = connection.gets.chomp
+        puts @connections_details[:clients]
+        (@connections_details[:clients]).keys.each do |client|
+          @connections_details[:clients][client].puts "#{username}: #{message}"
+        end
+      end
+    end
   end
+
+Server.new(8080, "localhost")
